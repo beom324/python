@@ -15,5 +15,11 @@ r:regular             2.11
   앞에서 만든 데이터를 이용하여 mpg데이터에 연료가격(price_fl)변수를 추가합니다.
 3)연료가격 변수가 잘 추가가 되었는지 확인하기 위하여 model, fl, price_fl변수를 추출해 앞부분 5행을 출력해봅니다
 '''
-df['price_fl'] = np.where(df['fl'] == 'p', 2.76,np.where(df['fl'] == 'r', 2.11,np.where(df['fl'] == 'e', 2.11,np.where(df['fl'] == 'd', 2.38, 2.35))))
+mpg = pd.DataFrame({
+    'fl':['c','d','e','p','r'],
+    'price_fl':[2.35,2.38,2.11,2.76,2.11]
+})
 
+mpg = mpg.merge(df)
+
+print(mpg[['model','fl','price_fl']].head(30))
