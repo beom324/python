@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-df = pd.read_csv("/Data/mpg.csv")
+df = pd.read_csv("../Data/mpg.csv")
 '''
 연습) mpg데이터를 읽어 들여 다음을 실습 해 봅니다.
 연료별                 가격
