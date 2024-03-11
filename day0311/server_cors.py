@@ -39,7 +39,6 @@ def insertSubmit():
 
     return render_template("titanic.html", result=result)
 
-
 @app.route("/gettitanic", methods=["POST"])
 def getTitanic():
     result = 'no'
