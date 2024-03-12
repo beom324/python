@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/iris">
+꽃잎의 길이 : <input type="text" name="sepal_length"><br>
+꽃잎의 넓이 : <input type="text" name="sepal_width"><br>
+꽃받침의 길이 : <input type="text" name="petal_length"><br>
+꽃받침의 넓이 : <input type="text" name="petal_width">
+    <input type="submit" value="결과확인">
+</form>
+{% if results%}
+<span>해당 꽃의 품종은 {{results}} 입니다!</span>
+{% endif %}
+</body>
+</html>
