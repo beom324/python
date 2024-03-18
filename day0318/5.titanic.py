@@ -121,13 +121,31 @@ print(X_test.shape)
 
 from sklearn.model_selection import cross_val_score
 from xgboost import XGBClassifier
-model = XGBClassifier(max_depth=3,random_state=1234)
-auc_scores =  cross_val_score(model,X_train,y_train,scoring="roc_auc")
-print("개별 Fold AUC점수 : " , auc_scores)
-print("평균 Fold AUC점수 : ", np.mean(auc_scores))
+#2가지 방식(XGBClassifier, RandomForestClassifier)
+xgb_model = XGBClassifier(max_depth=3,random_state=1234)
+auc_scores =  cross_val_score(xgb_model,X_train,y_train,scoring="roc_auc")
+xgb_model.fit(X_train,y_train)
 
-model.fit(X_train,y_train)
-y_test_pred = model.predict(X_test)
-submission["Survived"] = y_test_pred.astype(int)
-# submission.to_csv("./Data/titanic_day0318_04.csv",index=False)
+rf_model = RandomForestClassifier(random_state=1234)
+auc_scores = cross_val_score(rf_model,X_train,y_train,cv=5,scoring="roc_auc")
+rf_model.fit(X_train,y_train)
+
+
+#두개의 모델이 예측한 확률값을 합산하여 답안 파일을 만들어 보도록 합시다.
+#AUC스코어를 계산할 때 분류 라벨(사망 0, 생종 1)을 사용하는 대신
+#생존으로 분류할 확률값(0~1 범위)를 사용한다.
+
+#XGBClassifier, RandomForestClassifier의 각각의 생존할 확률값을 구해 봅시다.
+y_xgb_proba = xgb_model.predict_proba(X_test)[:,1] #1번째컬럼 = 생존할 확률
+y_rf_proba = rf_model.predict_proba(X_test)[:,1] #1번째컬럼 = 생존할 확률
+
+
+#앙상블 기법
+y_proba = (y_xgb_proba+y_rf_proba)/2
+submission['Survived']=y_proba
+
+
+# y_test_pred = xgb_model.predict(X_test)
+# submission["Survived"] = y_test_pred.astype(int)
+# submission.to_csv("./Data/titanic_day0318_05.csv",index=False)
 # print("답안파일 생성")
