@@ -120,14 +120,14 @@ print(X_train.shape,y_train.shape)
 print(X_test.shape)
 
 from sklearn.model_selection import cross_val_score
-
-model = RandomForestClassifier(random_state=1234)
-auc_scores = cross_val_score(model,X_train,y_train,cv=5,scoring="roc_auc")
-print("개별 Fold의 auc점수: " ,auc_scores)
-print("평균 AUC점수 : ", np.mean(auc_scores))
+from xgboost import XGBClassifier
+model = XGBClassifier(max_depth=3,random_state=1234)
+auc_scores =  cross_val_score(model,X_train,y_train,scoring="roc_auc")
+print("개별 Fold AUC점수 : " , auc_scores)
+print("평균 Fold AUC점수 : ", np.mean(auc_scores))
 
 model.fit(X_train,y_train)
 y_test_pred = model.predict(X_test)
-submission['Survived'] = y_test_pred.astype(int)
-# submission.to_csv("./Data/titanic_day_0318_03.csv",index=False)
-# print("답안파일작성")
+submission["Survived"] = y_test_pred.astype(int)
+submission.to_csv("./Data/titanic_day0318_04.csv",index=False)
+print("답안파일 생성")
